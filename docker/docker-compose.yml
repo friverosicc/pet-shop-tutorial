@@ -1,0 +1,28 @@
+version: '3'
+
+services:
+  ganache-cli:
+    image: trufflesuite/ganache-cli:latest
+    ports:
+      - 8545:8545
+    networks:
+      - truffle-app-net
+
+  truffle-app:
+    build:
+      context: ./docker-truffle-app
+    command: bash
+    stdin_open: true
+    tty: true
+    ports:
+      - 8080:8080
+    volumes:
+      - ../:/home/node/app
+    links:
+      - ganache-cli:ganache-cli
+    networks:
+      - truffle-app-net
+
+networks:
+  truffle-app-net:
+    driver: bridge
